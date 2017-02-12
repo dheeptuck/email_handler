@@ -11,3 +11,6 @@ attachments and retrieve the list of mailbox folders present.
 email_container.py
 Hosts a class that is used to encapsulte all the information in an email. This is used in the
 email_container.py. This also needs to be used if we want to sent an email.
+
+
+For the usage of the module refer email_handler_test.py
