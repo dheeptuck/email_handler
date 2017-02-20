@@ -79,20 +79,12 @@ class emailHandler:
 
 	def get_mail_by_id(self, mailbox_folder, id):
 		"""
-		Returns the newest mail in the specified mailbox folder.
+		Returns the Nth mail in the specified mailbox folder.
 		@param1: Mailbox folder from which the message needs to
 		         be retrieved in string.
 		@param2: The index of the message(1 denotes the oldest message
-			and -1 denotes the newwest message)
-		@return: Returns a email dict with the following keys
-				  1. From
-				  2. To
-				  3. Date
-				  4. Message-ID
-				  5. Content-Type
-				  6. MIME-Version
-				  7. Content
-				  8. Subject
+			and -1 denotes the newest message)
+		@return: Returns a email contianer
 
 		"""
 		return_dict = {}
@@ -101,18 +93,17 @@ class emailHandler:
 		latest_email_uid = data[0].split()[id] # data is a list.
 		return self.get_email_by_uid(latest_email_uid)
 
+	def get_all_mail_uid(self, mailbox_folder):
+		return_dict = {}
+		self.mail.select(mailbox_folder)
+		result, data = self.mail.uid('search', None, "ALL")
+		return data[0].split()
+
+
 	def get_email_by_uid(self, email_uid):
 		"""
 		@param1: the uid for the email that we want to fetch
-		@return: Returns a email dict with the following keys
-			  1. From
-			  2. To
-			  3. Date
-			  4. Message-ID
-			  5. Content-Type
-			  6. MIME-Version
-			  7. Content
-			  8. Subject
+		@return: Returns a email container
 		"""
 		return_container = emailContainer()
 		result, data = self.mail.uid('fetch', email_uid, '(RFC822)')# fetch the email body (RFC822) for the given ID
@@ -120,21 +111,13 @@ class emailHandler:
 		email_message = email.message_from_string(raw_email)
 		utc_ts = time.mktime((email.utils.parsedate(email_message['Date'])))
 		dt = datetime.datetime.fromtimestamp(utc_ts)
-		#return_dict["From"] = email.utils.parseaddr(email_message['From'])
 		return_container.from_address = email.utils.parseaddr(email_message['From'])
-		#return_dict["To"]   = email.utils.parseaddr(email_message['To'])
 		return_container.to_address = email.utils.parseaddr(email_message['To'])
-		#return_dict["Date"] = dt
 		return_container.date = dt 
-		#return_dict["Message-ID"] = email_message['Message-ID']
 		return_container.message_id = email_message['Message-ID']
-		#return_dict['Content-Type'] = email_message['Content-Type']
 		return_container.content_type = email_message['Content-Type']
-		#return_dict['MIME-Version'] = email_message['MIME-Version']
 		return_container.mime_version = email_message['MIME-Version']
-		#return_dict['Content'] = self.get_first_text_block(email_message)
 		return_container.content = self.get_first_text_block(email_message)
-		#return_dict['Subject'] = email_message['Subject']
 		return_container.subject = email_message['Subject']
 		return return_container
 
@@ -197,6 +180,61 @@ class emailHandler:
 		for uid in uid_list:
 			reply_list.append(self.get_email_by_uid(uid))
 		return reply_list
+
+	def get_uid_unread_emails(self, mailbox_folder):
+		"""
+		Gets the  UID of all unread emails.
+		@param 1: mailbox folder name
+		@return: list of UID's
+		"""
+		reply_list = []
+		self.mail.select(mailbox_folder)
+		result, data = self.mail.uid('search', None,"UNSEEN")
+		for uid in data[0].split():
+			reply_list.append(uid)
+		return reply_list
+
+	def get_unread_emails(self, mailbox_folder):
+		"""
+		Wrapper over get_uid_unread_emails to return a list
+		of email_containers having unread emails
+		@param 1: mailbox folder name
+		@return: list off email containers
+		"""
+		reply_list = []
+		for uid in self.get_uid_unread_emails(mailbox_folder):
+			reply_list.append(self.get_email_by_uid(uid))
+		return reply_list
+
+	def get_uid_read_emails(self, mailbox_folder):
+		"""
+		Gets the  UID of all read emails.
+		@param 1: mailbox folder name
+		@return: list of UID's
+		"""
+		reply_list = []
+		all_uid_list = self.get_all_mail_uid(mailbox_folder)
+		unread_uid_list =  self.get_uid_unread_emails(mailbox_folder)
+		for uid in all_uid_list:
+			reply_list.append(uid)
+		#remove all read UID's from the list
+		for uid in unread_uid_list:
+			reply_list.remove(uid)
+		return reply_list
+
+	def get_read_emails(self, mailbox_folder):
+		"""
+		Wrapper over get_uid_read_emails to return a list
+		of email_containers having read emails
+		@param 1: mailbox folder name
+		@return: list off email containers
+		"""
+		reply_list = []
+		for uid in self.get_uid_read_emails(mailbox_folder):
+			reply_list.append(self.get_email_by_uid(uid))
+		return reply_list
+
+
 
 	def send_mail(self, email_container):
 		"""
