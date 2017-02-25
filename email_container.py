@@ -25,8 +25,8 @@ class emailContainer:
 		self.mime_version = None
 		self.content = None
 		self.subject = None
-		self.attachment_name = None
-		self.attachment = None
+		self.attachment_name = []
+		self.attachment = []
 		self.container = {}
 
 

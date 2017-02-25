@@ -10,13 +10,14 @@ from email.MIMEBase import MIMEBase
 from email import encoders
 
 from email_container import emailContainer
+from config import download_directory
 
 
 
 class emailHandler:
 	"""
 	This class is designed to handle all functionality with respect
-	to a mailbox.
+	to a mailbox. Only one instance needs to be created per mailbox
 	"""
 	def __init__(self, email_id, password, SSL_address, smtp_server_address,\
 	            smtp_port):
@@ -76,6 +77,25 @@ class emailHandler:
 		elif maintype == 'text':
 			return email_message_instance.get_payload()
 
+	def get_email_attachment(self, email_message, email_container):
+		"""
+		An helper function for get_email_by_uid to fetch the attachments.
+		Fetches the attacments and stores in the attacchment list in the
+		emailContainer
+		@param1: The string email message
+		@param2: The email container to which attachments need to be populated
+		"""
+		if email_message.get_content_maintype() != 'multipart':
+			return
+		for part in email_message.walk():
+			if part.get_content_maintype() != 'multipart' and part.get\
+			('Content-Disposition') is not None:
+				email_container.attachment_name.append(part.get_filename())
+				open(download_directory + part.get_filename(), 'wb').\
+				   write(part.get_payload(decode=True))
+				email_container.attachment.append(open(download_directory\
+				      + part.get_filename(),"rb"))
+
 
 	def get_mail_by_id(self, mailbox_folder, id):
 		"""
@@ -119,6 +139,7 @@ class emailHandler:
 		return_container.mime_version = email_message['MIME-Version']
 		return_container.content = self.get_first_text_block(email_message)
 		return_container.subject = email_message['Subject']
+		self.get_email_attachment(email_message, return_container)
 		return return_container
 
 	def get_latest_email(self, mailbox_folder):
@@ -249,10 +270,10 @@ class emailHandler:
 		body = email_container.content
 		msg.attach(MIMEText(body, 'plain'))
 
-		#copy attachment if present
-		if email_container.attachment is not None:
-			filename = email_container.attachment_name
-			attachment = email_container.attachment
+		#copy attachment if present - currently handles one attachment
+		if len(email_container.attachment) > 0:
+			filename = email_container.attachment_name[0]
+			attachment = email_container.attachment[0]
 			part = MIMEBase('application', 'octet-stream')
 			part.set_payload((attachment).read())
 			encoders.encode_base64(part)
