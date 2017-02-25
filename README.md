@@ -1,7 +1,9 @@
 # email_handler
+<ul>
 The emailer handler consists of two files:
-1. email_handler.py
-2. email_container.py
+<li>email_handler.py</li>
+<li>email_container.py</li>
+</ul>
 
 email_handler.py 
 Hosts the emailHandler class. This class is supposed to take care of all tasks related to
