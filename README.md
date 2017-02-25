@@ -21,7 +21,7 @@ This is used in the email_container.py. This also needs to be used if we
 want to sent an email.
 
 
-####3. config.py
+###3. config.py
 This is used to store the configuration parameters for the module.
 
 
