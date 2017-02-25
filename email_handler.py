@@ -260,7 +260,7 @@ class emailHandler:
 				            filename= %s" % filename)
 			msg.attach(part)
 
-		server = smtplib.SMTP('smtp.gmail.com', 587)
+		server = smtplib.SMTP(self.smtp_server_address, self.smtp_port)
 		server.starttls()
 		server.login(msg['From'], self.password)
 		text = msg.as_string()
