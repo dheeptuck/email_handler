@@ -25,6 +25,8 @@ class emailHandler:
 		@param1: email_id
 		@param2: password
 		@param3: SSL_address
+		@param4: smtp server address(used to send emails)
+		@param5: smtp port
 		"""
 		self.email_id = email_id
 		self.password = password
@@ -84,6 +86,7 @@ class emailHandler:
 		emailContainer
 		@param1: The string email message
 		@param2: The email container to which attachments need to be populated
+		@return: None
 		"""
 		if email_message.get_content_maintype() != 'multipart':
 			return
@@ -114,6 +117,11 @@ class emailHandler:
 		return self.get_email_by_uid(latest_email_uid)
 
 	def get_all_mail_uid(self, mailbox_folder):
+		"""
+		Returns the UID of all mails in the specified folder.
+		@param 1: Mailbox folder
+		@return: List of UID's
+		"""
 		return_dict = {}
 		self.mail.select(mailbox_folder)
 		result, data = self.mail.uid('search', None, "ALL")

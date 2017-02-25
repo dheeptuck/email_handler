@@ -9,18 +9,33 @@ The emailer handler consists of two files:
 
 1. email_handler.py
 2. email_container.py
+3. config.py
+4. email_handler_test.py
 
-email_handler.py 
-----------------
+###1. email_handler.py 
 Hosts the emailHandler class. This class is supposed to take care of all tasks related to the mail box. The class provides API's to fetch mails on different filters, send mail with attachments and retrieve the list of mailbox folders present.
 
-email_container.py
+###2. email_container.py
+Hosts a class that is used to encapsulte all the information in an email. 
+This is used in the email_container.py. This also needs to be used if we 
+want to sent an email.
+
+
+####3. config.py
+This is used to store the configuration parameters for the module.
+
+
+###4. email_handler_test.py
+Shows sample usage of the module. Information about each test is commented.
+
+
+Usage Instructions
 ------------------
-Hosts a class that is used to encapsulte all the information in an email. This is used in the
-email_container.py. This also needs to be used if we want to sent an email.
+Configure the downloads folder in config.py. The API's are documented
+and the docstrings explaint the functionality. For further understanding
+of usage refer email_handler_test.py.
 
 
-For the usage of the module refer email_handler_test.py.
 
 Note:
 ----
