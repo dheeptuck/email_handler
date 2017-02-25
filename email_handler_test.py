@@ -17,9 +17,15 @@ if __name__ == "__main__":
 	for info in lst:
 		print info
 
-	#Get email by order (-2 refers second newest)
+	#Get email by order (-2 refers second newest) from Inbox
 	message = mailer.get_mail_by_id("Inbox",-2)
-	print "Latest email in the mail box"
+	print "Latest email in the mail box Inbox folder"
+	print message
+
+
+	#Get newest email from sent folder
+	message = mailer.get_mail_by_id("[Gmail]/Sent Mail",-1)
+	print "Latest email in the mail box Sent folder"
 	print message
 
 	#Fetch emails between dates
