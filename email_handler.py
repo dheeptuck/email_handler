@@ -155,7 +155,7 @@ class emailHandler:
 		Retrieves the latest mail in a given folder
 		@param: Mailbox folder
 		"""
-		self.get_mail_by_id(mailbox_folder,-1)
+		return self.get_mail_by_id(mailbox_folder,-1)
 
 
 
@@ -262,6 +262,15 @@ class emailHandler:
 		for uid in self.get_uid_read_emails(mailbox_folder):
 			reply_list.append(self.get_email_by_uid(uid))
 		return reply_list
+
+	def move_email(self, uid, destination_folder):
+		"""
+		Moves a email to the specified folder
+		"""
+		result = self.mail.uid('COPY', uid, destination_folder)
+		if result[0] == 'OK':
+			mov, data = self.mail.uid('STORE', uid , '+FLAGS', '(\Deleted)')
+			self.mail.expunge()	
 
 
 

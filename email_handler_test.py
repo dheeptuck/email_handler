@@ -74,3 +74,9 @@ if __name__ == "__main__":
 		print "*******************************************"
 		print message
 
+
+	#Move the latest message in inbox to a different spam folder
+	print "Moving newest email to spam folder"
+	uid_lst = mailer.get_all_mail_uid("Inbox")
+	mailer.move_email(uid_lst[-1], "[Gmail]/Spam")
+
