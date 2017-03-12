@@ -266,6 +266,9 @@ class emailHandler:
 	def move_email(self, uid, destination_folder):
 		"""
 		Moves a email to the specified folder
+		@param1: The UID of email to be moved
+		@param2: Detination folder to which the email
+		         needs to be moved
 		"""
 		result = self.mail.uid('COPY', uid, destination_folder)
 		if result[0] == 'OK':
