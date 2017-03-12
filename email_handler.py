@@ -92,7 +92,9 @@ class emailHandler:
 			return
 		for part in email_message.walk():
 			if part.get_content_maintype() != 'multipart' and part.get\
-			('Content-Disposition') is not None:
+			('Content-Disposition') is not None and part.get_filename()\
+				is not None and "":
+				print "test ",part.get_filename() 
 				email_container.attachment_name.append(part.get_filename())
 				open(download_directory + part.get_filename(), 'wb').\
 				   write(part.get_payload(decode=True))

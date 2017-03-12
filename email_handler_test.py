@@ -7,8 +7,8 @@ from email_container import emailContainer  #Contains all info in an email
 
 
 if __name__ == "__main__":
-	mailer = emailHandler('verduremail@gmail.com', 'Dabangg!', 'imap.gmail.com',\
-							'smtp.gmail.com',587)
+	mailer = emailHandler('*********', '*********', 'letsconfigure.com',\
+							'letsconfigure.com',587)
 	
 
 	#Print all available mail folders
@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
 
 	#Get newest email from sent folder
-	message = mailer.get_mail_by_id("[Gmail]/Sent Mail",-1)
+	message = mailer.get_mail_by_id("INBOX.Sent",-1)
 	print "Latest email in the mail box Sent folder"
 	print message
 
@@ -61,8 +61,8 @@ if __name__ == "__main__":
 
 
 	#Read all unread emails
-	unread_mails = mailer.get_unread_emails("Inbox")
 	print "fetching unread emails from inbox"
+	unread_mails = mailer.get_unread_emails("Inbox")
 	for message in unread_mails:
 		print "*******************************************"
 		print message
@@ -78,5 +78,5 @@ if __name__ == "__main__":
 	#Move the latest message in inbox to a different spam folder
 	print "Moving newest email to spam folder"
 	uid_lst = mailer.get_all_mail_uid("Inbox")
-	mailer.move_email(uid_lst[-1], "[Gmail]/Spam")
+	mailer.move_email(uid_lst[-1], "INBOX.Trash")
 
