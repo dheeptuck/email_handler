@@ -28,8 +28,13 @@ if __name__ == "__main__":
 	print "Latest email in the mail box Sent folder"
 	print message
 
-	#Fetch emails between dates
-	y_mails = mailer.get_emails_between_dates(start_date = "12-02-2017", end_date="15-02-2017")
+	#Fetch UID between dates in Inbox
+	print "fetching uid between dates"
+	uid_list = mailer.get_uid_between_dates(mailbox_folder="Inbox",start_date = "12-02-2017", end_date="15-02-2017")
+	print uid_list
+
+	#Fetch emails between dates in Inbox
+	y_mails = mailer.get_emails_between_dates(mailbox_folder="Inbox", start_date = "12-02-2017", end_date="15-02-2017")
 	print "fetching email between dates"
 	for message in y_mails:
 		print "*******************************************"

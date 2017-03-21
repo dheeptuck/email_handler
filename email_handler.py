@@ -174,14 +174,16 @@ class emailHandler:
 			reply_list.append(self.get_email_by_uid(uid))
 		return reply_list
 
-	def get_uid_between_dates(self, start_date=None, end_date=None):
+	def get_uid_between_dates(self,mailbox_folder="Inbox", start_date=None, end_date=None):
 		"""
 		Retrieves the uid between the dates.
 		@param1: start date from which retrieval needs to start
-		@param2: end date for the retrieval
+		@param2: The folder that needs to be searched(defaults to Inbox)
+		@param3: end date for the retrieval
 		@return: List of uid's
 		"""
 		reply_list = []
+		self.mail.select(mailbox_folder)
 		start_date = datetime.datetime.strptime(start_date, "%d-%m-%Y")
 		start_date = start_date.strftime("%d-%b-%Y")
 		end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
@@ -193,19 +195,20 @@ class emailHandler:
 			reply_list.append(uid)
 		return reply_list
 
-	def get_emails_between_dates(self, start_date=None, end_date=None):
+	def get_emails_between_dates(self,mailbox_folder="Inbox", start_date=None, end_date=None):
 		"""
 		Retrieves all mails between two dates. This is not a optimized
 		retrieval because it retrieves the entire email between the
 		given dates. For optimized retrieval use get_uid_between_dates
 		and then use the uid to retrieve the email using get_email_by_uid(uid).
 		This is a wrapper over get_uid_between_dates.
-		@param1: start date from which retrieval needs to start
-		@param2: end date for the retrieval
+		@param1: The folder that needs to be searched(defaults to Inbox)
+		@param2: start date from which retrieval needs to start
+		@param3: end date for the retrieval
 		@return: List of email dict
 		"""
 		reply_list = []
-		uid_list = self.get_uid_between_dates(start_date, end_date)
+		uid_list = self.get_uid_between_dates(mailbox_folder, start_date, end_date)
 		for uid in uid_list:
 			reply_list.append(self.get_email_by_uid(uid))
 		return reply_list
