@@ -27,7 +27,7 @@ The email handler consists of four files:
 
 
 
-**1. email_handler.py **
+**1. email_handler.py**
 
 Hosts the emailHandler class. This class is designed to take care of all tasks related to the mail box. The class provides API's to 
 
